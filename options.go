@@ -1,13 +1,13 @@
-// v0.1.0
-// Author: DIEHL E.
-// ©  Sep 2023
+// v0.2.0
+// Author: wunderbarb
+// © Nov 2024
 
 package toolbox
 
 type options struct {
 	withDir     bool
 	orderedSize bool
-	ext         string
+	ext         []string
 }
 
 // Option allows parameterizing function
@@ -21,9 +21,10 @@ func collectOptions(opts ...Option) *options {
 	return oo
 }
 
+// WithExtension adds an extension to the options.
 func WithExtension(ext string) Option {
 	return func(op *options) {
-		op.ext = ext
+		op.ext = append(op.ext, ext)
 	}
 }
 

@@ -1,4 +1,4 @@
-// v0.2.0
+// v0.3.0
 // Author: Eric DIEHL
 // © Nov 2024
 
@@ -9,10 +9,14 @@ package toolbox
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"slices"
 	"strings"
 )
+
+// HasExtension returns true if `s` has the case-insensitive extension.
+func HasExtension(s string, ext string) bool {
+	return strings.HasSuffix(strings.ToLower(s), sanitizeExtension(ext))
+}
 
 // IsDirectory checks whether `name` is a directory.
 // It returns true if it is a directory.
@@ -47,9 +51,12 @@ func List(dir string, opts ...Option) ([]string, error) {
 	} else {
 		for _, f := range lfi {
 			if !f.IsDir() {
-				if oo.ext != "" {
-					if filepath.Ext(f.Name()) == oo.ext {
-						list1 = append(list1, f)
+				if len(oo.ext) != 0 {
+					for _, ext := range oo.ext {
+						if HasExtension(f.Name(), ext) {
+							list1 = append(list1, f)
+							break
+						}
 					}
 				} else {
 					list1 = append(list1, f)
@@ -76,8 +83,16 @@ func Strip(name string, ext string) string {
 	if ext == "" {
 		return name
 	}
-	if ext[:1] != "." {
-		ext = "." + ext
+
+	if !HasExtension(name, ext) {
+		return name
 	}
-	return strings.TrimSuffix(name, ext)
+	e := sanitizeExtension(ext)
+	n1 := strings.Index(strings.ToLower(name), e)
+	return name[:n1]
+
+}
+
+func sanitizeExtension(ext string) string {
+	return strings.ToLower("." + strings.TrimPrefix(strings.TrimSpace(ext), "."))
 }

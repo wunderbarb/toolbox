@@ -1,6 +1,6 @@
-// V0.1.0
-// Author: DIEHL E.
-// (C) Oct 2024
+// V0.1.1
+// Author: wunderbarb
+// © Nov 2024
 
 package toolbox
 
@@ -72,4 +72,8 @@ func Test_ParseFieldsFromLine(t *testing.T) {
 	r1 := bufio.NewReader(strings.NewReader(line))
 	_, err = ParseFieldsInLine(r1, "bad")
 	assert.ErrorIs(err, ErrParsingFailed)
+
+	r2 := test.FaultyReader{}
+	_, err = ParseFieldsInLine(r2, "scan")
+	assert.Error(err)
 }

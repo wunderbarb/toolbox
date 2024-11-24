@@ -1,6 +1,6 @@
 // v0.1.0
-// Author: Eric DIEHL
-// (C) Oct 2024
+// Author: wunderbarb
+// © Oct 2024
 
 package toolbox
 
@@ -47,7 +47,7 @@ func ReadFieldsInLine(rd io.Reader) ([]string, error) {
 //	The error may be ErrParsingFailed if there was a first field but not the one expected.  It returns typical scanner
 //	errors such as EOF.
 func ParseFieldsInLine(rd io.Reader, expected string) ([]string, error) {
-	expected = strings.Trim(expected, " ") // removes any trailing and leading spaces
+	expected = strings.TrimSpace(expected)
 	sParsed, err := ReadFieldsInLine(rd)
 	if err != nil {
 		return nil, err

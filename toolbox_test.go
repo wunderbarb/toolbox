@@ -1,5 +1,5 @@
 // V0.2.0
-// Author: DIEHL E.
+// Author: wunderbarb
 // © Nov 2024
 
 package toolbox
@@ -22,10 +22,12 @@ func Test_IsDirectory(t *testing.T) {
 func Test_List_WithExtension(t *testing.T) {
 	require, assert := test.Describe(t)
 
-	l, err := List("../toolbox", WithExtension(".go"))
+	l, err := List("../toolbox", WithExtension(test.SwapCase(".md")))
 	require.NoError(err)
-	assert.NotEqual(0, len(l))
-	assert.NotZero(len(l))
+	assert.Len(l, 2)
+	l, err = List("../toolbox", WithExtension(".go"), WithExtension(".md"))
+	require.NoError(err)
+	assert.Greater(len(l), 2)
 	l, _ = List("../toolbox", WithExtension(".gold"))
 	assert.Zero(len(l))
 	l, _ = List("testdata2", WithExtension(".go"))
@@ -92,6 +94,6 @@ func Test_Strip(t *testing.T) {
 		{"try.pcd.1.spe", "1.spe", "try.pcd"},
 	}
 	for _, tt := range data {
-		assert.Equal(tt.s, Strip(tt.f, tt.ext))
+		assert.Equal(tt.s, Strip(tt.f, test.SwapCase(tt.ext)))
 	}
 }
